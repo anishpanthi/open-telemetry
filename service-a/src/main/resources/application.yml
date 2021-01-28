@@ -1,0 +1,9 @@
+server:
+  port: 9091
+spring:
+  application:
+    name: service-a
+#opentracing:
+#  jaeger:
+#    udp-sender:
+#      host: lslogcpm001.hms.hmsy.com
