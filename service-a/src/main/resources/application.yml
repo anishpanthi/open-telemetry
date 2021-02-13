@@ -3,7 +3,7 @@ server:
 spring:
   application:
     name: service-a
-#opentracing:
-#  jaeger:
-#    udp-sender:
-#      host: lslogcpm001.hms.hmsy.com
+logging:
+  level:
+    root: info
+    net.app.opentelemetry.service.a: info
