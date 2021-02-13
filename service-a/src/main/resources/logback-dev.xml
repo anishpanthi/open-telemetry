@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <springProperty scope="context" name="LOG_PATH" source="app.log.path"
+    defaultValue="/logs/web/weblogic/wls-12.1.3.0/CMS-HCV"/>
+
+  <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+      </Pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>DEBUG</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>INFO</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>TRACE</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>WARN</level>
+      <onMatch>ACCEPT</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>ERROR</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+  </appender>
+
+  <springProfile name="local,dev">
+    <appender name="Dev-FileAppender"
+      class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${LOG_PATH}/logs/cms-hcv-access.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>${LOG_PATH}/logs/cms-hcv-access.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+          <maxFileSize>5MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+      </rollingPolicy>
+      <encoder>
+        <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+        </Pattern>
+      </encoder>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>DEBUG</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>INFO</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>TRACE</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>WARN</level>
+        <onMatch>ACCEPT</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>ERROR</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+    </appender>
+
+    <appender name="Async-Dev-FileAppender" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="Dev-FileAppender"/>
+    </appender>
+  </springProfile>
+
+  <springProfile name="test">
+    <appender name="Access-FileAppender-Test"
+      class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${LOG_PATH}/logs/cms-hcv-access.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <!-- daily rollover -->
+        <fileNamePattern>${LOG_PATH}/logs/cms-hcv-access.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+          <maxFileSize>5MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+      </rollingPolicy>
+      <encoder>
+        <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+        </Pattern>
+      </encoder>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>DEBUG</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>INFO</level>
+        <onMatch>ACCEPT</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>TRACE</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>WARN</level>
+        <onMatch>ACCEPT</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>ERROR</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+    </appender>
+
+    <appender name="Async-Access-FileAppender-Test" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="Access-FileAppender-Test"/>
+    </appender>
+
+  </springProfile>
+
+  <springProfile name="prod">
+    <appender name="Access-FileAppender-Prod"
+      class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${LOG_PATH}/logs/cms-hcv-access.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <!-- daily rollover -->
+        <fileNamePattern>${LOG_PATH}/logs/cms-hcv-access.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+          <maxFileSize>5MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+      </rollingPolicy>
+      <encoder>
+        <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+        </Pattern>
+      </encoder>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>DEBUG</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>INFO</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>TRACE</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>WARN</level>
+        <onMatch>ACCEPT</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>ERROR</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+    </appender>
+
+    <appender name="Async-Access-FileAppender-Prod" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="Access-FileAppender-Prod"/>
+    </appender>
+
+  </springProfile>
+
+  <appender name="Error-Appender"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/logs/cms-hcv.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${LOG_PATH}/logs/cms-hcv.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>5MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+    <encoder>
+      <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+      </Pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>DEBUG</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>INFO</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>TRACE</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>WARN</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>ERROR</level>
+      <onMatch>ACCEPT</onMatch>
+    </filter>
+  </appender>
+
+  <springProfile name="local">
+    <root>
+      <level value="INFO"/>
+      <appender-ref ref="consoleAppender"/>
+    </root>
+  </springProfile>
+  <springProfile name="dev,test">
+    <root>
+      <level value="INFO"/>
+    </root>
+  </springProfile>
+  <springProfile name="prod">
+    <root>
+      <level value="WARN"/>
+    </root>
+  </springProfile>
+
+  <appender name="Async-Error-Appender" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="Error-Appender"/>
+  </appender>
+
+  <springProfile name="local">
+    <logger name="com.hms.hcv.client" level="DEBUG" additivity="false">
+      <appender-ref ref="consoleAppender"/>
+      <!--            <appender-ref ref="Async-Dev-FileAppender"/>-->
+      <!--            <appender-ref ref="Async-Error-Appender"/>-->
+    </logger>
+  </springProfile>
+
+  <springProfile name="dev">
+    <logger name="com.hms.hcv.client" level="INFO" additivity="false">
+      <appender-ref ref="Async-Dev-FileAppender"/>
+      <appender-ref ref="Async-Error-Appender"/>
+    </logger>
+  </springProfile>
+
+  <springProfile name="test">
+    <logger name="com.hms.hcv.client" level="INFO" additivity="false">
+      <appender-ref ref="Async-Access-FileAppender-Test"/>
+      <appender-ref ref="Async-Error-Appender"/>
+    </logger>
+  </springProfile>
+
+  <springProfile name="prod">
+    <logger name="com.hms.hcv.client" level="WARN" additivity="false">
+      <appender-ref ref="Async-Access-FileAppender-Prod"/>
+      <appender-ref ref="Async-Error-Appender"/>
+    </logger>
+  </springProfile>
+</configuration>
