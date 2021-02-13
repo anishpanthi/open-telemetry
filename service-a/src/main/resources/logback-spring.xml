@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+      </Pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>DEBUG</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>INFO</level>
+      <onMatch>ACCEPT</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>TRACE</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>WARN</level>
+      <onMatch>ACCEPT</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>ERROR</level>
+      <onMatch>ACCEPT</onMatch>
+    </filter>
+  </appender>
+
+  <appender name="Async-ConsoleAppender" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="consoleAppender"/>
+  </appender>
+
+  <springProfile name="local,dev">
+    <appender name="Dev-FileAppender"
+      class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>serviceA.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>serviceA.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+          <maxFileSize>5MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+      </rollingPolicy>
+      <encoder>
+        <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+        </Pattern>
+      </encoder>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>DEBUG</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>INFO</level>
+        <onMatch>ACCEPT</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>TRACE</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>WARN</level>
+        <onMatch>ACCEPT</onMatch>
+      </filter>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>ERROR</level>
+        <onMatch>DENY</onMatch>
+      </filter>
+    </appender>
+    <appender name="Async-Dev-FileAppender" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="Dev-FileAppender"/>
+    </appender>
+  </springProfile>
+
+  <appender name="Error-Appender"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>serviceA-error.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>serviceA-error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>5MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+    <encoder>
+      <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+      </Pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>DEBUG</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>INFO</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>TRACE</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>WARN</level>
+      <onMatch>DENY</onMatch>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>ERROR</level>
+      <onMatch>ACCEPT</onMatch>
+    </filter>
+  </appender>
+
+  <springProfile name="local">
+    <root>
+      <level value="DEBUG"/>
+<!--      <appender-ref ref="Async-ConsoleAppender"/>-->
+    </root>
+  </springProfile>
+  <springProfile name="dev">
+    <root>
+      <level value="INFO"/>
+    </root>
+  </springProfile>
+
+  <appender name="Async-Error-Appender" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="Error-Appender"/>
+  </appender>
+
+  <springProfile name="local">
+    <logger name="net.app.opentelemetry.service.a" level="DEBUG" additivity="false">
+      <appender-ref ref="Async-ConsoleAppender"/>
+    </logger>
+    <logger name="org.springframework" level="DEBUG" additivity="false">
+      <appender-ref ref="Async-ConsoleAppender"/>
+    </logger>
+  </springProfile>
+
+  <springProfile name="dev">
+    <logger name="net.app.opentelemetry.service.a" level="INFO" additivity="false">
+      <appender-ref ref="Async-Dev-FileAppender"/>
+      <appender-ref ref="Async-Error-Appender"/>
+    </logger>
+    <logger name="org.springframework" level="DEBUG" additivity="false">
+      <appender-ref ref="Async-Dev-FileAppender"/>
+      <appender-ref ref="Async-Error-Appender"/>
+    </logger>
+  </springProfile>
+</configuration>

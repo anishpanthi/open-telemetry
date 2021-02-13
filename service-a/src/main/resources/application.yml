@@ -1,9 +1,0 @@
-server:
-  port: 9091
-spring:
-  application:
-    name: service-a
-logging:
-  level:
-    root: info
-    net.app.opentelemetry.service.a: info
